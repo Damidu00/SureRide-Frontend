@@ -10,6 +10,9 @@ export default function Booking(){
   const [car, setCar] = useState(null)
   const [loading, setLoading] = useState(Boolean(carId))
   const [error, setError] = useState(null)
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
+  const [totalPrice, setTotalPrice] = useState(0)
 
   const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
 
@@ -30,29 +33,88 @@ export default function Booking(){
     return ()=>{ mounted = false }
   },[carId, API_BASE])
 
+  // initialize dates when car loads
+  useEffect(()=>{
+    if(!car) return
+    const today = new Date()
+    const tomorrow = new Date(today)
+    tomorrow.setDate(today.getDate() + 1)
+    const toIso = d => d.toISOString().slice(0,10)
+    setStartDate(toIso(today))
+    setEndDate(toIso(tomorrow))
+    setTotalPrice(car.pricePerDay || 0)
+  },[car])
+
+  // recalc totalPrice when dates change
+  useEffect(()=>{
+    if(!car || !startDate || !endDate) return
+    try{
+      const s = new Date(startDate)
+      const e = new Date(endDate)
+      const diff = Math.ceil((e - s) / (1000*60*60*24))
+      const days = diff > 0 ? diff : 1
+      setTotalPrice((car.pricePerDay || 0) * days)
+    }catch(err){ /* ignore invalid date */ }
+  },[startDate, endDate, car])
+
   async function handlePay(e){
     e.preventDefault()
+    // first ensure user is logged in
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
+    if(!token){
+      // prompt to login
+      if (typeof window !== 'undefined' && window.Swal) {
+        window.Swal.fire({ icon: 'warning', title: 'Please login to complete booking' })
+      } else {
+        alert('Please login to complete booking')
+      }
+      navigate('/login')
+      return
+    }
+
     try{
-      // Dynamically import SweetAlert2 from CDN to avoid adding dependency
-      const SwalModule = await import('https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.esm.js')
-      const Swal = SwalModule.default || SwalModule
-      await Swal.fire({
-        icon: 'success',
-        title: 'Payment successfull',
-        showConfirmButton: true,
-        confirmButtonText: 'OK'
+      // create booking on server
+      const payload = {
+        car: car ? car._id : carId,
+        startDate,
+        endDate,
+        totalPrice
+      }
+
+      const res = await fetch(`${API_BASE}/api/bookings`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
       })
-      // After payment, navigate to home or bookings
+
+      const data = await res.json()
+
+      if(!res.ok && !data.booking){
+        const msg = data.message || 'Booking failed'
+        throw new Error(msg)
+      }
+
+      // show success alert
+      try{
+        const SwalModule = await import('https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.esm.js')
+        const Swal = SwalModule.default || SwalModule
+        await Swal.fire({ icon: 'success', title: 'Payment successfull', text: data.message || 'Booking created' })
+      }catch(err){
+        if (typeof window !== 'undefined' && window.Swal) {
+          window.Swal.fire({ icon: 'success', title: 'Payment successfull' })
+        } else {
+          alert('Payment successfull')
+        }
+      }
+
+      // after successful booking navigate to bookings list or home
       navigate('/')
     }catch(err){
-      console.error('Payment alert failed', err)
-      // Fallback: try global Swal (if included via script) or basic alert
-      if (typeof window !== 'undefined' && window.Swal) {
-        window.Swal.fire({ icon: 'success', title: 'Payment successfull' })
-      } else {
-        alert('Payment successfull')
-      }
-      navigate('/')
+      console.error('Booking creation failed', err)
+      setError(err.message || 'Booking failed')
     }
   }
 
