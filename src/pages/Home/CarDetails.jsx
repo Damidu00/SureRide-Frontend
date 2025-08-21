@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 
@@ -7,6 +8,8 @@ export default function CarDetails(){
   const [car, setCar] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+
+  const [days, setDays] = useState(1) // new state for day count
 
   const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
 
@@ -29,7 +32,6 @@ export default function CarDetails(){
     return ()=>{ mounted = false }
   },[id, API_BASE])
 
-  // Helper to normalize features to array of strings
   function normalizeFeatures(features){
     if(!features) return []
     if(Array.isArray(features)){
@@ -42,7 +44,6 @@ export default function CarDetails(){
     return []
   }
 
-  // Loading skeleton
   if(loading) return (
     <div className="max-w-4xl mx-auto py-12 px-4">
       <div className="animate-pulse space-y-6">
@@ -74,8 +75,12 @@ export default function CarDetails(){
   const features = normalizeFeatures(car.features)
   const imageUrl = car.image ? `${API_BASE}/uploads/${car.image}` : `https://via.placeholder.com/1200x800?text=${encodeURIComponent(car.brand+'+'+car.model)}`
 
+  // ✅ Calculate total amount
+  const totalPrice = days * Number(car.pricePerDay)
+
   function handleBook(){
-    navigate(`/booking?carId=${car._id}`)
+    // send carId, days and calculated totalPrice
+    navigate(`/booking?carId=${car._id}&days=${days}&price=${totalPrice}`)
   }
 
   return (
@@ -83,14 +88,14 @@ export default function CarDetails(){
       <button onClick={()=>navigate(-1)} className="mb-6 text-sm text-blue-600 hover:underline">&larr; Back</button>
 
       <div className="md:flex md:items-stretch md:gap-6">
-        {/* Left: image card (has shadow) */}
+        {/* Left: image */}
         <div className="md:w-1/2 flex-shrink-0">
           <div className="bg-white rounded-xl overflow-hidden shadow-lg">
             <img src={imageUrl} alt={`${car.brand} ${car.model}`} className="w-full h-96 md:h-full object-cover" />
           </div>
         </div>
 
-        {/* Right: details column (no shadow) */}
+        {/* Right: details */}
         <div className="md:w-1/2 p-8 flex flex-col justify-between bg-white rounded-xl">
           <div>
             <div className="flex items-start justify-between">
@@ -123,10 +128,33 @@ export default function CarDetails(){
                 </div>
               </div>
             )}
+
+            {/* ✅ Day selection dropdown */}
+            <div className="mt-6">
+              <label className="block text-sm font-medium mb-2">Select days</label>
+              <select 
+                value={days} 
+                onChange={(e)=>setDays(Number(e.target.value))}
+                className="border rounded px-3 py-2 w-32"
+              >
+                {[...Array(10)].map((_,i)=>(
+                  <option key={i+1} value={i+1}>{i+1}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* ✅ Show total amount */}
+            <div className="mt-3 text-lg font-semibold text-gray-800">
+              Total: Rs: {totalPrice.toLocaleString()}
+            </div>
           </div>
 
           <div className="mt-8 flex items-center gap-4">
-            <button onClick={handleBook} disabled={!car.availability} className={`px-6 py-3 rounded-md text-white font-semibold ${car.availability ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}`}>
+            <button 
+              onClick={handleBook} 
+              disabled={!car.availability} 
+              className={`px-6 py-3 rounded-md text-white font-semibold ${car.availability ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}`}
+            >
               {car.availability ? 'Book now' : 'Not available'}
             </button>
             <button onClick={()=>{navigator.clipboard?.writeText(imageUrl)}} className="px-4 py-2 rounded-md border">Share Image</button>
@@ -136,3 +164,4 @@ export default function CarDetails(){
     </div>
   )
 }
+

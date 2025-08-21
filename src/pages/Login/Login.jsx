@@ -16,7 +16,12 @@ export default function Login() {
       const res = await axios.post("http://localhost:5000/api/users/login", { email, password });
       if (res.data && res.data.token) {
         localStorage.setItem("token", res.data.token);
-        navigate("/");
+        console.log(res)
+        if(res.data.user.type == "admin"){
+              navigate("/admin")
+            }else{
+              navigate("/")
+            }
       } else {
         setError(res.data.message || "Login failed");
       }
