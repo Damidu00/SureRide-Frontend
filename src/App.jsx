@@ -10,6 +10,7 @@ import Login from "./pages/Login/Login";
 import CarDetails from "./pages/Home/CarDetails";
 import Booking from "./pages/Booking/Booking";
 import { Toaster } from "react-hot-toast";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -24,6 +25,7 @@ function App() {
           <Route path="/booking" element={<Booking />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path='/admin/*' element={<AdminDashboard/>}/>
         </Routes>
       </BrowserRouter>
     </div>
