@@ -177,6 +177,8 @@
 
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import Navbar from '../../components/Navbar'
+import SecondNavBar from '../../components/SecondNavBar'
 
 export default function Booking(){
   const location = useLocation()
@@ -313,7 +315,9 @@ export default function Booking(){
   }
 
   return (
-  <div className="max-w-6xl mx-auto py-12 px-6 sm:px-8">
+    <>
+    <SecondNavBar/>
+    <div className="max-w-6xl mx-auto py-12 px-6 sm:px-8">
       <button onClick={()=>navigate(-1)} className="mb-6 text-sm text-blue-600 hover:underline flex items-center gap-2">← Back</button>
 
       <div className="bg-white rounded-xl shadow-lg p-6">
@@ -394,5 +398,7 @@ export default function Booking(){
         )}
       </div>
     </div>
+    </>
+  
   )
 }

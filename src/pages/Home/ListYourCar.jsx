@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import SecondNavBar from "../../components/SecondNavBar";
 
 
 export default function AddCar() {
@@ -79,6 +80,8 @@ export default function AddCar() {
   };
 
   return (
+    <>
+    <SecondNavBar/>
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
       <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-2xl">
         <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
@@ -205,5 +208,6 @@ export default function AddCar() {
         </form>
       </div>
     </div>
+    </>
   );
 }

@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import SecondNavBar from '../../components/SecondNavBar'
 
 export default function CarDetails(){
   const { id } = useParams()
@@ -160,7 +161,9 @@ export default function CarDetails(){
   }
 
   return (
-    <div className="max-w-7xl mx-auto py-12 px-6 sm:px-8">
+  <>
+  <SecondNavBar/>
+  <div className="max-w-7xl mx-auto py-12 px-6 sm:px-8">
       <button onClick={()=>navigate(-1)} className="mb-6 text-sm text-blue-600 hover:underline flex items-center gap-2">← Back</button>
 
       <div className="md:flex md:items-start md:gap-8">
@@ -255,6 +258,8 @@ export default function CarDetails(){
         </div>
       </div>
     </div>
+  </>
+    
   )
 }
 
