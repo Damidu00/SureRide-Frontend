@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function PopularRides() {
   const [cars, setCars] = useState([]);
@@ -41,6 +41,8 @@ export default function PopularRides() {
     return null;
   }
 
+  const navigate = useNavigate()
+
   return (
     <section className="py-12 px-4 max-w-7xl mx-auto">
       <h2 className="text-3xl font-bold text-gray-800 mb-12 text-center sm:text-4xl md:text-5xl -mt-18">
@@ -65,6 +67,7 @@ export default function PopularRides() {
               <Link
                 key={car._id}
                 to={`/cars/${car._id}`}
+                onClick={(e)=>{ e.preventDefault(); navigate(`/cars/${car._id}`) }}
                 className="relative w-full h-68 sm:h-80 lg:h-96 rounded-[8px] shadow-lg overflow-hidden group cursor-pointer"
               >
                 {/* Car Image */}
