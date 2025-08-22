@@ -1,12 +1,50 @@
-# React + Vite
+# SureRide — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite single-page app for the SureRide car rental UI.
 
-Currently, two official plugins are available:
+This project uses Vite, React, Tailwind CSS utilities, and React Router for client-side navigation.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Quick start (PowerShell)
 
-## Expanding the ESLint configuration
+1. Install dependencies
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+   ```powershell
+   cd "d:\!SLIIT UNI\Internship\Tasks\Car Rental Management sys\frontend"
+   npm install
+   ```
+
+2. Run the dev server
+
+   ```powershell
+   npm run dev
+   ```
+
+3. Build for production
+
+   ```powershell
+   npm run build
+   npm run preview
+   ```
+
+## Environment & API
+
+- The frontend uses `axios` for API calls. If the app expects a base API URL, set it in your code or use a `.env` (Vite) variable such as `VITE_API_BASE_URL` and reference it via `import.meta.env.VITE_API_BASE_URL`.
+
+## Project structure (important files)
+
+- `src/main.jsx` — React entry (mounts `App.jsx`)
+- `src/App.jsx` — main app routes and layout
+- `src/components/` — shared UI components
+- `src/pages/` — route pages: `Home`, `Login`, `Signup`, `Admin`
+
+## Notes
+
+- Dev server default: http://localhost:5173
+- Ensure backend is running (default: http://localhost:5000) and CORS enabled (backend already sets `cors()` globally).
+
+## Troubleshooting
+
+- If API calls fail, confirm the backend URL and CORS settings.
+- If hot reload doesn't work, restart Vite and clear the browser cache.
+
+---
