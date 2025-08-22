@@ -11,6 +11,8 @@ import CarDetails from "./pages/Home/CarDetails";
 import Booking from "./pages/Booking/Booking";
 import { Toaster } from "react-hot-toast";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
+import ListYourCar from "./pages/Home/ListYourCar";
+import AddCar from "./pages/Home/ListYourCar";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -25,6 +27,7 @@ function App() {
           <Route path="/booking" element={<Booking />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/post-ad" element={<AddCar/>} />
           <Route path='/admin/*' element={<AdminDashboard/>}/>
         </Routes>
       </BrowserRouter>
