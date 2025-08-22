@@ -20,7 +20,7 @@ function Users() {
           },
         })
         console.log(res)
-        setUsers(res.data.users)   // ✅ FIX HERE
+        setUsers(res.data.users)  
       } catch (err) {
         setError("Failed to load users")
       } finally {
