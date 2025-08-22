@@ -9,7 +9,7 @@ export default function Navbar() {
   const handleLogout = () => {
     // remove JWT from localStorage
     localStorage.removeItem("token");
-
+    localStorage.removeItem("userType")
     // redirect user to login page
     navigate("/login");
   };

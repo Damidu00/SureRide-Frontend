@@ -1,8 +1,18 @@
 import React from "react";
 import { User, LogOut } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function SecondNavBar() {
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // remove JWT from localStorage
+    localStorage.removeItem("token");
+    localStorage.removeItem("userType")
+    // redirect user to login page
+    navigate("/login");
+  };
   return (
     <nav className="bg-black backdrop-blur-md py-4 px-8 flex items-center justify-between fixed w-full top-0 left-0 z-50">
       
@@ -41,7 +51,9 @@ export default function SecondNavBar() {
       
       {/* Logout - Right Side */}
       <div className="flex items-center">
-        <button className="text-white hover:text-red-400 transition-colors duration-200 p-2 hover:bg-white/10 rounded-full">
+        <button 
+        onClick={handleLogout}
+        className="text-white hover:text-red-400 transition-colors duration-200 p-2 hover:bg-white/10 rounded-full">
           <LogOut size={20} className="drop-shadow-lg" />
         </button>
       </div>

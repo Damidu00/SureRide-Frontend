@@ -1,11 +1,20 @@
-import React from 'react'
-import { Routes, Route, Link } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Routes, Route, Link, useNavigate } from 'react-router-dom'
 import Users from './users'
 import Cars from './Cars'
 import BookingList from './Booking'
 
 
 function AdminDashboard() {
+const navigate = useNavigate()
+  useEffect(()=>{
+    const type = localStorage.getItem("userType")
+    if(type !== "admin"){
+      navigate("/")
+    }
+  })
+
+
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
