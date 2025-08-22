@@ -79,7 +79,7 @@ export default function PopularRides() {
                   <h3 className="text-xl font-semibold text-gray-800 mb-1">{car.brand} {car.model}</h3>
                   <p className="text-gray-600 text-sm mb-2">{car.year} • {car.color}</p>
                   <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium shadow-md mb-2 inline-block">
-                    ${car.pricePerDay}/day
+                    RS: {car.pricePerDay}/day
                   </span>
                   {features.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-2">
