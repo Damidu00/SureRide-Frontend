@@ -2,7 +2,7 @@ import React from "react";
 import { User, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
-export default function Navbar() {
+export default function SecondNavBar() {
 
   const navigate = useNavigate();
 
@@ -14,7 +14,7 @@ export default function Navbar() {
     navigate("/login");
   };
   return (
-    <nav className="bg-transparent backdrop-blur-md py-4 px-8 flex items-center justify-between fixed w-full top-0 left-0 z-50">
+    <nav className="bg-black backdrop-blur-md py-4 px-8 flex items-center justify-between fixed w-full top-0 left-0 z-50">
       
       {/* Logo - Left Side */}
       <div className="flex items-center gap-2">
@@ -60,3 +60,12 @@ export default function Navbar() {
     </nav>
   );
 }
+
+
+
+
+
+
+
+
+SecondNavBar

@@ -1,23 +1,67 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import PopularRides from "../../components/PopularRides";
-import { Link } from "react-router-dom";
+import Footer from "../../components/Footer";
+import bgImage from "../../assets/bg.png";
 
 export default function Home() {
+  const tagline = "Find your perfect ride and book instantly.\nEnjoy the best cars at the best prices!";
+  const [typedText, setTypedText] = useState("");
+
+  useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      setTypedText(tagline.slice(0, index + 1));
+      index++;
+      if (index === tagline.length) clearInterval(interval);
+    }, 50);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gray-100 pt-20">
+    <div className="min-h-screen bg-gray-100">
       <Navbar />
-      <div className="flex flex-col items-center justify-center py-16">
-        <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-xl text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4 text-blue-600">Welcome to Car Rental</h1>
-          <p className="mb-6 text-gray-700">Find your perfect ride and book instantly. Enjoy the best cars at the best prices!</p>
-          <div className="flex justify-center gap-4">
-            <Link to="/login" className="bg-[#1877f2] text-white px-6 py-2 rounded hover:bg-blue-600 transition">Login</Link>
-            <Link to="/signup" className="bg-white border border-blue-600 text-blue-600 px-6 py-2 rounded hover:bg-blue-50 transition">Sign Up</Link>
-          </div>
+
+      <div
+        className="relative w-full h-[90vh] flex items-center justify-center pt-20 -mt-6"
+        style={{
+          backgroundImage: `url(${bgImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <div className="relative z-10 text-center px-4">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 text-white -mt-[200px] font-sans">
+            Welcome to Car Rental
+          </h1>
+          <p
+            className="text-lg sm:text-xl md:text-2xl font-medium h-24 text-white font-mono -mt-[30px]"
+            style={{ whiteSpace: "pre-line" }}
+          >
+            {typedText}
+            <span className="border-r-2 border-white animate-blink ml-1"></span>
+          </p>
         </div>
+      </div>
+
+      <div className="py-16 px-4 md:px-8">
         <PopularRides />
       </div>
+
+      <Footer />
+
+      <style>
+        {`
+          @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0; }
+          }
+          .animate-blink {
+            animation: blink 1s step-start infinite;
+          }
+        `}
+      </style>
     </div>
   );
 }
